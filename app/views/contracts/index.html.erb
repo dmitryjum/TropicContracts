@@ -1,0 +1,30 @@
+<div class="table table-auto w-full card-container">
+  <div class="table-header-group">
+    <div class="table-row bg-white text-gray-800">
+      <div class="table-cell text-lg p-4 pl-8">Contracts</div>
+      <div class="table-cell"></div>
+      <div class="table-cell"></div>
+      <div class="table-cell"></div>
+    </div>
+  </div>
+  <div class="table-header-group">
+    <div class="table-row bg-gray-50 text-gray-800 text-sm">
+      <div class="table-cell border-t border-gray-300 p-4 pl-8">Contract Owner</div>
+      <div class="table-cell border-t border-gray-300 p-4 pl-8">Name</div>
+      <div class="table-cell border-t border-gray-300 p-4 pl-8">Start Date</div>
+      <div class="table-cell border-t border-gray-300 p-4 pl-8">End Date</div>
+      <div class="table-cell border-t border-gray-300 p-4 pl-8">Contract Value</div>
+    </div>
+  </div>
+  <div class="table-row-group">
+    <% @contracts.each do |contract| %>
+      <div id=<%= dom_id(contract) %> class="table-row text-gray-600 text-sm">
+        <div class="table-cell border-t border-gray-300 p-4 pl-8"><%= "#{contract.contract_owner.first_name} #{contract.contract_owner.last_name}" %></div>
+        <div class="table-cell border-t border-gray-300 p-4 pl-8"><%= contract.name %></div>
+        <div class="table-cell border-t border-gray-300 p-4 pl-8"><%= contract.start_date %></div>
+        <div class="table-cell border-t border-gray-300 p-4 pl-8"><%= contract.end_date %></div>
+        <div class="table-cell border-t border-gray-300 p-4 pl-8"><%= contract.value.format %></div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+2023-05-05 16:04:09.880 PDT [25091] LOG:  starting PostgreSQL 13.2 on arm-apple-darwin21.2.0, compiled by Apple clang version 13.0.0 (clang-1300.0.27.3), 64-bit
+2023-05-05 16:04:09.883 PDT [25091] LOG:  listening on IPv6 address "::1", port 5432
+2023-05-05 16:04:09.883 PDT [25091] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-05-05 16:04:09.883 PDT [25091] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2023-05-05 16:04:09.916 PDT [25092] LOG:  database system was shut down at 2023-05-05 15:44:10 PDT
+2023-05-05 16:04:09.925 PDT [25091] LOG:  database system is ready to accept connections
+2023-05-05 16:04:11.970 PDT [25248] FATAL:  database "tropic_take_home_development" does not exist
+2023-05-05 16:04:12.153 PDT [25252] FATAL:  database "tropic_take_home_test" does not exist

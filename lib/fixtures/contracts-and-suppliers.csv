@@ -1,0 +1,15 @@
+Contract Owner,External Contract ID,Contract Name,Start Date,End Date,Contract Value,Supplier
+bob.smith@example.com,488c9387-9563-48ea-8b20-42f32c78cf8e,Company Messenger,01/01/2023,06/30/2023,"20,000.00",Message Corp.
+bob.smith@example.com,77ee1b77-a10e-40f7-bf60-a90ec49975a7,Company Messenger,07/01/2023,12/31/2023,"30,000.00",Message Corporation
+bob.smith@example.com,e5bb5c98-61cd-4bd5-8d9e-2a67eb8945fb,Payroll Software,01/01/2023,12/31/2023,"500,000.00",Silicon Valley Payroll
+john.doe@example.com,9e253491-7610-4e07-a51f-78b18d0452de,Company Messenger,01/01/2023,03/31/2023,"10,000.00",Message Corporation
+bob.smith@example.com,466f3c20-3b41-447f-aca0-a4e243288c01,,01/02/2023,04/01/2023,"10,000.00",Megasoftware International
+john.doe@example.com,69a6924c-23d7-4b1b-8800-13661095cd06,Application Software,01/01/2022,03/31/2022,"10,000.00",Deployment Solutions LLC
+bob.smith@example.com,df8ec04c-f090-4767-94fa-57fdaacb85f0,Pizza Parties,11/01/2023,12/31/2023,500,Giovanni's Cardboard Distributions
+bob.smith@example.com,8ba01f55-5fe4-45e8-a60f-b2e03d49e433,Company Vacations,07/01/2023,07/31/2023,"1,000.00","Timeshare Travels, LLC"
+john.doe@example.com,1b2cd225-0609-4b48-a4b0-b913a6ffa32d,HRIS Systems,,,,HRIS Incorporated
+john.doe@example.com,1a444ed7-159e-4c69-bb97-7e8a8c242b7f,Company Vacations,07/01/2023,07/31/2023,"10,000.00",Timeshare Travels
+bob.smith@example.com,67f839e3-6463-42a1-b76d-d60fbaa3c103,Expensive Laptops,01/01/2023,,"100,000.00",Orange Inc.
+john.doe@example.com,f0c8d256-a3c0-402b-bfc9-fe30e4a4ad8e,Company Vacations,07/01/2022,07/31/2022,"1,000.00",TimeshareTravels
+john.doe@example.com,5f42825d-278d-4bf5-9b75-18b2b4c6de84,Expensive Laptops,01/01/2023,12/31/2023,,Orange Inc.
+bob.smith@example.com,79ee2cb1-9047-4a95-8753-375e64844adb,Time Traveling Gear,12/31/2023,01/01/2023,"100,000.00",Police Box LLC
