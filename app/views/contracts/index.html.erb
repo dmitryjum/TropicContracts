@@ -5,12 +5,17 @@
       <div class="table-cell"></div>
       <div class="table-cell"></div>
       <div class="table-cell"></div>
+      <div class="table-cell"></div>
+      <div class="table-cell">
+        <%= button_tag "Import Contracts", class: "px-4 py-2 text-sm shadow-sm transition ease-in-out duration-300 rounded leading-snug whitespace-nowrap text-white font-semibold bg-blue-500 hover:bg-blue-600" %>
+      </div>
     </div>
   </div>
   <div class="table-header-group">
     <div class="table-row bg-gray-50 text-gray-800 text-sm">
       <div class="table-cell border-t border-gray-300 p-4 pl-8">Contract Owner</div>
-      <div class="table-cell border-t border-gray-300 p-4 pl-8">Name</div>
+      <div class="table-cell border-t border-gray-300 p-4 pl-8">Supplier</div>
+      <div class="table-cell border-t border-gray-300 p-4 pl-8">Contract Name</div>
       <div class="table-cell border-t border-gray-300 p-4 pl-8">Start Date</div>
       <div class="table-cell border-t border-gray-300 p-4 pl-8">End Date</div>
       <div class="table-cell border-t border-gray-300 p-4 pl-8">Contract Value</div>
@@ -20,6 +25,7 @@
     <% @contracts.each do |contract| %>
       <div id=<%= dom_id(contract) %> class="table-row text-gray-600 text-sm">
         <div class="table-cell border-t border-gray-300 p-4 pl-8"><%= "#{contract.contract_owner.first_name} #{contract.contract_owner.last_name}" %></div>
+        <div class="table-cell border-t border-gray-300 p-4 pl-8"><%= contract.try(:supplier) %></div>
         <div class="table-cell border-t border-gray-300 p-4 pl-8"><%= contract.name %></div>
         <div class="table-cell border-t border-gray-300 p-4 pl-8"><%= contract.start_date %></div>
         <div class="table-cell border-t border-gray-300 p-4 pl-8"><%= contract.end_date %></div>
