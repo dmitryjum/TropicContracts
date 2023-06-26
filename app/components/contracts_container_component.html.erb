@@ -1,25 +1,13 @@
-<div class="table table-auto w-full card-container drop-shadow-md">
+<%= back_button if back_button? %>
+
+<div class="table table-auto w-full card-container drop-shadow-md mt-4">
   <div class="table-header-group">
-    <div class="table-row bg-white text-gray-800">
-      <div class="table-cell text-lg p-4 pl-8">Contracts</div>
-      <div class="table-cell"></div>
-      <div class="table-cell"></div>
-      <div class="table-cell"></div>
-      <div class="table-cell"></div>
-      <div class="table-cell">
-        <%= link_to import_modal_contracts_path, class: "button-primary button-shadow", data: { turbo_frame: "import_modal" } do %>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-          </svg>
-          Import Contracts
-        <% end %>
-      </div>
-    </div>
+    <%= top_header if top_header? %>
   </div>
   <div class="table-header-group">
     <div class="table-row bg-gray-50 text-gray-800 text-sm">
       <div class="table-cell border-t border-gray-300 p-4 pl-8">Contract Owner</div>
-      <div class="table-cell border-t border-gray-300 p-4 pl-8 <%= hidden_if(supplier_view) %>">Supplier</div>
+      <div class="table-cell border-t border-gray-300 p-4 pl-8 <%= hidden_if(supplier_name) %>">Supplier</div>
       <div class="table-cell border-t border-gray-300 p-4 pl-8">Contract Name</div>
       <div class="table-cell border-t border-gray-300 p-4 pl-8">Start Date</div>
       <div class="table-cell border-t border-gray-300 p-4 pl-8">End Date</div>
@@ -27,6 +15,6 @@
     </div>
   </div>
   <div class="table-row-group">
-    <%= render ContractRowComponent.with_collection(contracts, supplier_view:) %>
+    <%= render ContractRowComponent.with_collection(contracts, supplier_name:) %>
   </div>
 </div>

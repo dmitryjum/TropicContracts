@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :contracts, only: :index do
     collection do
       get :import_modal
+      get :supplier
     end
   end
 end
