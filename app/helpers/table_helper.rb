@@ -1,5 +1,5 @@
 module TableHelper
-  def supplier_row_visibility
-    "hidden" if supplier_view
+  def hidden_if(condition)
+    "hidden" if condition
   end
 end

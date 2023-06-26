@@ -20,7 +20,7 @@
   <div class="table-header-group">
     <div class="table-row bg-gray-50 text-gray-800 text-sm">
       <div class="table-cell border-t border-gray-300 p-4 pl-8">Contract Owner</div>
-      <div class="table-cell border-t border-gray-300 p-4 pl-8 <%= supplier_row_visibility %>">Supplier</div>
+      <div class="table-cell border-t border-gray-300 p-4 pl-8 <%= hidden_if(supplier_view) %>">Supplier</div>
       <div class="table-cell border-t border-gray-300 p-4 pl-8">Contract Name</div>
       <div class="table-cell border-t border-gray-300 p-4 pl-8">Start Date</div>
       <div class="table-cell border-t border-gray-300 p-4 pl-8">End Date</div>
