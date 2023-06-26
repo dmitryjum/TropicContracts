@@ -4,5 +4,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "contracts#index"
 
-  resources :contracts, only: [:index, :new]
+  resources :contracts, only: :index do
+    collection do
+      get :import_modal
+    end
+  end
 end
