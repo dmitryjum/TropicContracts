@@ -1,11 +1,5 @@
-<% if supplier_view %>
-  <%= link_to root_path, class: "link-text" do %>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-    </svg>
-    All Contracts
-  <% end %>
-<% end %>
+<%= back_button if back_button? %>
+
 <div class="table table-auto w-full card-container drop-shadow-md mt-4">
   <div class="table-header-group">
     <%= top_header if top_header? %>
@@ -13,7 +7,7 @@
   <div class="table-header-group">
     <div class="table-row bg-gray-50 text-gray-800 text-sm">
       <div class="table-cell border-t border-gray-300 p-4 pl-8">Contract Owner</div>
-      <div class="table-cell border-t border-gray-300 p-4 pl-8 <%= hidden_if(supplier_view) %>">Supplier</div>
+      <div class="table-cell border-t border-gray-300 p-4 pl-8 <%= hidden_if(supplier_name) %>">Supplier</div>
       <div class="table-cell border-t border-gray-300 p-4 pl-8">Contract Name</div>
       <div class="table-cell border-t border-gray-300 p-4 pl-8">Start Date</div>
       <div class="table-cell border-t border-gray-300 p-4 pl-8">End Date</div>
@@ -21,6 +15,6 @@
     </div>
   </div>
   <div class="table-row-group">
-    <%= render ContractRowComponent.with_collection(contracts, supplier_view:) %>
+    <%= render ContractRowComponent.with_collection(contracts, supplier_name:) %>
   </div>
 </div>
