@@ -10,4 +10,8 @@ class Contract < ApplicationRecord
   belongs_to :contract_owner
 
   monetize :value_cents
+
+  def self.avg_value_per_supplier(supplier)
+    Money.new(Contract.where(supplier:).average(:value_cents)).format
+  end
 end
