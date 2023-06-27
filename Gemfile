@@ -18,6 +18,7 @@ gem "tailwindcss-rails", "~> 2.0.29"
 gem "turbo-rails", "~> 1.4.0"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 gem "view_component"
+gem "rcsv"
 
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
