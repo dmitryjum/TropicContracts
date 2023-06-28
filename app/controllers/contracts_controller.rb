@@ -3,10 +3,6 @@ class ContractsController < ApplicationController
     @contracts = Contract.includes(:contract_owner)
   end
 
-  def import_modal
-    @contract = Contract.new
-  end
-
   def supplier
     @supplier_name = params[:supplier_name]
     @contracts = Contract.includes(:contract_owner).where(supplier: @supplier_name)
@@ -14,7 +10,11 @@ class ContractsController < ApplicationController
   end
 
   def import_csv
-    @contracts = CsvContractImportService.new(params[:file]).call
+    import_service = CsvContractImportService.new(params[:file])
+    import_service.call
+    @contracts = Contract.includes(:contract_owner)
+    @updated_or_created_counter = import_service.updated_contracts_counter
+    @invalid_records = import_service.invalid_contract_instances
     return redirect_to request.referer, notice: 'No file added' if params[:file].nil?
     return redirect_to request.referer, notice: 'Only CSV files allowed' unless params[:file].content_type == 'text/csv'
     respond_to do |format|

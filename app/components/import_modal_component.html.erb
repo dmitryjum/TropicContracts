@@ -28,7 +28,7 @@
     -->
     <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
       <h1 class="text-gray-800 text-lg sm:py-4 sm:pl-8 bg-purple-50 w-full border-b">Import Contracts</h1>
-      <%= form_tag import_csv_contracts_path, id: "contracts", method: :post, multipart: true do %>
+      <%= form_tag import_csv_contracts_path, id: "import_csv", method: :post, multipart: true do %>
         <div class="sm:py-9 sm:px-10 border-b bg-white flex flex-col justify-center items-center">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="3 3 17 18" fill="currentColor" class="w-9 h-12 text-gray-500">
             <path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zm6.905 9.97a.75.75 0 00-1.06 0l-3 3a.75.75 0 101.06 1.06l1.72-1.72V18a.75.75 0 001.5 0v-4.19l1.72 1.72a.75.75 0 101.06-1.06l-3-3z" clip-rule="evenodd" />
@@ -36,7 +36,6 @@
           </svg>
 
           <p class="text-gray-800 text-md mt-3">Upload a CSV here to Import Contracts</p>
-          <%#= link_to "Click here to select a file upload", "#", class: "link-text mt-3" %>
           <label for="file" class="link-text mt-3">Click here to select a file upload</label> <%= file_field_tag :file, class: "absolute top-0 right-0 opacity-0 cursor-pointer", accept: ".csv" %>
         </div>
         <div class="sm:py-4 sm:px-8 bg-purple-50 w-full flex justify-between">
