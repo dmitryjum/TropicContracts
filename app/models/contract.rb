@@ -12,6 +12,7 @@ class Contract < ApplicationRecord
   monetize :value_cents
 
   # scope :by_supplier, ->(supplier) { where("to_tsvector('english', supplier) @@ plainto_tsquery('english', :q)", q: supplier) } --- This one works good and quick, but doesn't pass the test, which would render inaccurate results
+  # PGSearch gem uses ranking, which is a bit slower and overkill for just one column
   scope :by_supplier, ->(supplier) { where("supplier ~* ?", supplier) }
 
   def self.avg_value_per_supplier(supplier)
