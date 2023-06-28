@@ -20,8 +20,7 @@ export default class extends Controller {
 
   handleSuccess({ detail: { success } }) {
     if (success) {
-      const modalContainer = this.containerTarget
-      modalContainer.className = "hidden"
+      this.closeModal();
     }
   }
   
