@@ -11,7 +11,10 @@ class Contract < ApplicationRecord
 
   monetize :value_cents
 
+  scope :by_supplier, ->(supplier) { where(supplier: supplier) }
+
   def self.avg_value_per_supplier(supplier)
     Money.new(Contract.where(supplier:).average(:value_cents)).format
   end
+
 end
