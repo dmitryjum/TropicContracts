@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "contracts" do %>
+  <%= render ContractRowComponent.with_collection(@contracts) %>
+<% end %>
