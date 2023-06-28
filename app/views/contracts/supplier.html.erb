@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "table_container" do %>
   <%= render ContractsContainerComponent.new(contracts: @contracts, supplier_name: @supplier_name) do |component| %>
     <% component.with_back_button do %>
-      <%= link_to root_path, class: "link-text", data: { turbo_frame: "table_container" } do %>
+      <%= link_to root_path, class: "link-text mb-4 block", data: { turbo_frame: "table_container" } do %>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
         </svg>
