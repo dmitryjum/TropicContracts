@@ -54,7 +54,7 @@ RSpec.describe Contract, type: :model do
       let!(:contract3) { FactoryBot.create(:contract, supplier: 'Supplier A', value_cents: 3000) }
 
       it 'returns the average value per supplier' do
-        expect(Contract.avg_value_per_supplier('Supplier A')).to eq('$20.00') # Assuming your Money format is '$X.XX'
+        expect(Contract.avg_value_per_supplier(supplier: 'Supplier A')).to eq('$20.00') # Assuming your Money format is '$X.XX'
       end
     end
   end
