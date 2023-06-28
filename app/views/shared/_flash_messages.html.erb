@@ -1,6 +1,8 @@
-<% if notice %>
-  <p class="notice"><%= notice %></p>
-<% end %>
-<% if alert %>
-  <%= render FlashAlertComponent.new(alert:)%>
-<% end %>
+<div id="flash">
+  <% if notice %>
+    <p class="notice"><%= notice %></p>
+  <% end %>
+  <% if alert %>
+    <%= render FlashAlertComponent.new(alert:)%>
+  <% end %>
+</div>

@@ -11,16 +11,12 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-purple-50 h-full w-full">
+  <body class="bg-purple-50 w-full">
     <%= render partial: "layouts/nav" %>
 
     <main class="container mx-auto mt-28 px-5">
-      <%= turbo_frame_tag "flash" do %>
-        <%= render partial: "shared/flash_messages" %>
-      <% end %>
-      <%= turbo_frame_tag "table_container" do %>
-        <%= yield %>
-      <% end %>
+      <%= render partial: "shared/flash_messages" %>
+      <%= yield %>
     </main>
   </body>
 </html>

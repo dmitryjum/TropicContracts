@@ -1,9 +1,6 @@
 class FlashAlertComponent < ViewComponent::Base
+  attr_reader :invalid_records_alert
   def initialize(alert: nil)
-    @alert = alert
-  end
-
-  def invalid_csv_rows
-    debugger
+    @invalid_records_alert = alert[:invalid_records]
   end
 end
