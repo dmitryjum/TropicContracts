@@ -6,10 +6,10 @@ class ContractsController < ApplicationController
   end
 
   def supplier
-    flash.now[:alert] = "Supplier"
     @supplier_name = params[:supplier_name]
     @contracts = Contract.includes(:contract_owner).where(supplier: @supplier_name)
     @avg_contract_value = Contract.avg_value_per_supplier(@supplier_name)
+    flash.clear
   end
 
   def import_csv
@@ -20,7 +20,7 @@ class ContractsController < ApplicationController
     @contracts = Contract.includes(:contract_owner)
     @updated_or_created_counter = import_service.updated_contracts_counter
     @invalid_records = import_service.invalid_contract_instances
-    flash.now[:notice] = "#{@updated_or_created_counter} records have been updated successfuly" if @updated_or_created_counter > 0
+    flash.now[:notice] = "#{@updated_or_created_counter} records have been created or updated successfuly" if @updated_or_created_counter > 0
     flash.now[:alert] = {invalid_records: @invalid_records} if @invalid_records.size > 0
     respond_to do |format|
       format.turbo_stream
