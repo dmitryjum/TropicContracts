@@ -26,4 +26,36 @@ RSpec.describe Contract, type: :model do
   describe "associations" do
     it { should belong_to(:contract_owner) }
   end
+
+  describe 'scopes' do
+    describe '.by_supplier' do
+      let!(:contract1) { FactoryBot.create(:contract, supplier: 'Supplier A') }
+      let!(:contract2) { FactoryBot.create(:contract, supplier: 'Supplier B') }
+      let!(:contract3) { FactoryBot.create(:contract, supplier: 'Supplier C') }
+
+      it 'returns contracts matching the given supplier' do
+        expect(Contract.by_supplier('Supplier A')).to eq([contract1])
+        expect(Contract.by_supplier('Supplier B')).to eq([contract2])
+        expect(Contract.by_supplier('Supplier C')).to eq([contract3])
+      end
+
+      it 'does not return contracts with different suppliers' do
+        expect(Contract.by_supplier('Supplier A')).not_to include(contract2, contract3)
+        expect(Contract.by_supplier('Supplier B')).not_to include(contract1, contract3)
+        expect(Contract.by_supplier('Supplier C')).not_to include(contract1, contract2)
+      end
+    end
+  end
+
+  describe 'class methods' do
+    describe '.avg_value_per_supplier' do
+      let!(:contract1) { FactoryBot.create(:contract, supplier: 'Supplier A', value_cents: 1000) }
+      let!(:contract2) { FactoryBot.create(:contract, supplier: 'Supplier A', value_cents: 2000) }
+      let!(:contract3) { FactoryBot.create(:contract, supplier: 'Supplier A', value_cents: 3000) }
+
+      it 'returns the average value per supplier' do
+        expect(Contract.avg_value_per_supplier('Supplier A')).to eq('$20.00') # Assuming your Money format is '$X.XX'
+      end
+    end
+  end
 end
