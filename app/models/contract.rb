@@ -15,8 +15,9 @@ class Contract < ApplicationRecord
   # PGSearch gem uses ranking, which is a bit slower and overkill for just one column
   scope :by_supplier, ->(supplier) { where("supplier ~* ?", supplier) }
 
-  def self.avg_value_per_supplier(supplier)
-    Money.new(Contract.where(supplier:).average(:value_cents)).format
+  def self.avg_value_per_supplier(supplier:, collection: nil)
+    avg =  collection.present? ? collection.average(:value_cents) : Contract.by_supplier(supplier).average(:value_cents)
+    Money.new(avg).format
   end
 
 end
