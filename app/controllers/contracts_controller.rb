@@ -1,13 +1,14 @@
 class ContractsController < ApplicationController
+  include Pagy::Backend
 
   def index
-    @contracts = Contract.includes(:contract_owner)
+    @pagy, @contracts = pagy(Contract.includes(:contract_owner), items: 5)
     flash.clear
   end
 
   def supplier
     @supplier_name = params[:supplier_name]
-    @contracts = Contract.includes(:contract_owner).by_supplier(@supplier_name)
+    @pagy, @contracts = pagy(Contract.includes(:contract_owner).by_supplier(@supplier_name), items: 5)
     @avg_contract_value = Contract.avg_value_per_supplier(@supplier_name)
     flash.clear
   end
