@@ -63,5 +63,21 @@ RSpec.describe CsvContractImportService do
       expect(invalid_contract2.contract_owner_id).not_to be_nil
       File.delete(invalid_records_file_path)
     end
+
+    it 'imports only new contracts' do
+      contract1 = FactoryBot.create(:contract, external_contract_id: "1", supplier: 'Supplier A')
+      File.write(file_path, csv_data)
+      service = described_class.new(file_path)
+
+      expect { service.call }.to change(Contract, :count).by(1)
+                              .and change(ContractOwner, :count).by(2)
+
+      expect(service.updated_contracts_counter).to eq(2)
+      expect(service.invalid_contract_instances).to be_empty
+      expect(service.result_batches.length).to eq(1)
+
+      expect(Contract.find_by_external_contract_id("1").name).to eq('Contract A')
+      File.delete(file_path)
+    end
   end
 end
