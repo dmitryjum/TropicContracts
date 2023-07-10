@@ -10,10 +10,12 @@ class ContractRowComponent < ViewComponent::Base
 
   def supplier_view_link
     tag.div class: "table-cell border-t border-gray-300 p-4 pl-8 #{hidden_if(supplier_name)}" do
-      link_to contract.supplier,
-              supplier_contracts_path(supplier_name: contract.supplier),
-              class: "link-text",
-              data: { turbo_frame: "table_container" } if contract.supplier.present?
+      if contract.supplier.present?
+        link_to contract.supplier,
+                supplier_contracts_path(supplier_name: contract.supplier),
+                class: "link-text",
+                data: { turbo_frame: "table_container" }
+      end
     end
   end
 end

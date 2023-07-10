@@ -9,20 +9,20 @@ gem "bootsnap", require: false
 gem "email_validator", "~> 2.2.4"
 gem "importmap-rails", "~> 1.1.6"
 gem "money-rails", "~>1.15"
+gem "pagy", "~> 6.0"
 gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
+gem "rcsv"
 gem "redis", "~> 4.0"
+gem "rubocop"
+gem "rubocop-rails"
+gem "rubocop-rspec"
 gem "sprockets-rails", "~> 3.4.2"
 gem "stimulus-rails", "~> 1.2.1"
 gem "tailwindcss-rails", "~> 2.0.29"
 gem "turbo-rails", "~> 1.4.0"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 gem "view_component"
-gem "rcsv"
-gem "pagy", "~> 6.0"
-gem "rubocop"
-gem "rubocop-rails"
-gem "rubocop-rspec"
 
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
