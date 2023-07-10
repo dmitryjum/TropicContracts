@@ -1,0 +1,85 @@
+inherit_from:
+  # - .rubocop_todo.yml
+  - .rubocop_rails.yml
+  - .rubocop_rspec.yml
+  - .rubocop_strict.yml
+
+
+
+inherit_mode:
+  merge:
+    - Exclude
+
+require:
+  # - rubocop-performance
+  # - standard/cop/semantic_blocks
+  # - standard/cop/block_single_line_braces
+
+# inherit_gem:
+  # standard: config/base.yml
+
+
+
+AllCops:
+  Exclude:
+    - 'bin/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - 'gemfiles/**/*'
+    - 'node_modules/**/*'
+    - 'lib/templates/**/*'
+    - 'lib/tasks/**/*'
+    - 'test/**/*' # we have decided not improve the old test suite
+    - 'lib_old/**/*'
+    - 'lib/**/*'
+    - 'doc/**/*'
+    - 'db/data/**/*'
+  DisplayCopNames: true
+  TargetRubyVersion: '2.7'
+
+# Standard/SemanticBlocks:
+#   Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/GlobalVars:
+  Exclude:
+    - 'config/initializers/**/*'
+
+Rails/Output:
+  Exclude:
+    - 'config/**/*'
+    - 'app/jobs/**/*'
+
+Rails/OutputSafety:
+  Exclude:
+    - 'spec/**/*'
+    - 'engines/**/spec/**/*'
+
+Rails/FilePath:
+  Exclude:
+    - 'config/**/*'
+
+Rails/ReversibleMigration:
+  Enabled: true
+
+# [MattP] We have a pretty legacy reliance on the old Time.now behavior and a config.time_zone setting...
+# this should be corrected, but for now there are about 59 instances that need to be waded thru after
+# re-enabling this cop
+Rails/TimeZone:
+  Enabled: false
+
+# [MattP] I often turn this one off because there are legit reasons sometimes to make a table without
+# timestamp columns; up for debate
+Rails/CreateTableWithTimestamps:
+  Enabled: false
+
+# [MattP] For now, I'm disabling this for our legacy controllers, but I'd like to enable this for anything
+# we build in the future, especially if that gets built in a module/engine
+Rails/LexicallyScopedActionFilter:
+  Exclude:
+    - 'app/controllers/**/*'
