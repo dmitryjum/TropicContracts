@@ -2,7 +2,10 @@
   <% if notice %>
       <p class="notice flex justify-between" data-controller="flash-component">
         <span><%= notice %></span>
-        <span class="cursor-pointer" data-action="click->flash-component#closeFlash">X</span>
+        <%# <span class="cursor-pointer" data-action="click->flash-component#closeFlash">X</span> %>
+        <svg data-action="click->flash-component#closeFlash" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 cursor-pointer">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
       </p>
   <% end %>
   <% if alert %>
@@ -17,7 +20,9 @@
               <% end %>
             </ul>
           </div>
-          <div class="cursor-pointer" data-action="click->flash-component#closeFlash">X</div>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 cursor-pointer" data-action="click->flash-component#closeFlash">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </div>
       <% end %>
     <% else %>

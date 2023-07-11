@@ -11,6 +11,8 @@ export default class extends Controller {
   }
 
   closeFlash(e) {
+    e.preventDefault()
+    e.stopPropagation();
     e.target.parentElement.style.display = "none"
   }
 }
