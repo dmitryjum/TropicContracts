@@ -1,28 +1,35 @@
-<% if notice %>
-    <p class="notice flex justify-between" data-controller="flash-component">
-      <span><%= notice %></span>
-      <span class="cursor-pointer" data-action="click->flash-component#closeFlash">X</span>
-    </p>
-<% end %>
-<% if alert %>
-  <% if alert[:invalid_records] %>
-    <% alert[:invalid_records].map do |record| %>
-      <div class="alert flex justify-between" data-controller="flash-component">
-        <div>
-          <p>Contract with external_contract_id: <%= record.external_contract_id %> hasn't been created/updated due to errors:</p>
-          <ul>
-            <% record.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-        <div class="cursor-pointer" data-action="click->flash-component#closeFlash">X</div>
-      </div>
-    <% end %>
-  <% else %>
-    <p class="alert flex justify-between" data-controller="flash-component">
-      <span><%= alert %></span>
-      <span class="cursor-pointer" data-action="click->flash-component#closeFlash">X</span>
-    </p>
+<div id="flash">
+  <% if notice %>
+      <p class="notice flex justify-between" data-controller="flash-component">
+        <span><%= notice %></span>
+        <%# <span class="cursor-pointer" data-action="click->flash-component#closeFlash">X</span> %>
+        <svg data-action="click->flash-component#closeFlash" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 cursor-pointer">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </p>
   <% end %>
-<% end %>
+  <% if alert %>
+    <% if alert[:invalid_records] %>
+      <% alert[:invalid_records].map do |record| %>
+        <div class="alert flex justify-between" data-controller="flash-component">
+          <div>
+            <p>Contract with external_contract_id: <%= record.external_contract_id %> hasn't been created/updated due to errors:</p>
+            <ul>
+              <% record.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 cursor-pointer" data-action="click->flash-component#closeFlash">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="alert flex justify-between" data-controller="flash-component">
+        <span><%= alert %></span>
+        <span class="cursor-pointer" data-action="click->flash-component#closeFlash">X</span>
+      </p>
+    <% end %>
+  <% end %>
+</div>

@@ -1,4 +1,7 @@
-<%= turbo_stream.replace "flash", partial: "shared/flash_messages" %>
+<%= turbo_stream.replace "flash" do %>
+  <%= render FlashComponent.new(notice:, alert:) %>
+<% end %>
+
 <%= turbo_stream.replace "contracts" do %>
   <%= render ContractRowComponent.with_collection(@contracts) %>
 <% end %>
