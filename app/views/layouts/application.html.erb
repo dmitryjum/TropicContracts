@@ -15,7 +15,7 @@
     <%= render partial: "layouts/nav" %>
 
     <main class="container mx-auto mt-28 mb-10 px-5">
-      <%= render partial: "shared/flash_messages" %>
+      <%= render FlashComponent.new(notice:, alert:) %>
       <%= yield %>
     </main>
   </body>
