@@ -17,5 +17,4 @@ Index and Supplier actions eager load contract owners to avoid N+1 queries durin
 - Brakeman gem can be installed to test security vulnarabilites in Rails application
 - jemalloc gem can be installed to memory allocation improvement if needed
 ##### Unsolved issues:
-Flash messages could be closed via X button, but I spent some time struggling to figure out how to clear or update them while navigating or updating Turbo Frames. I found DHH's comment somewhere in Github issues, that only several Turbo Streams can be rendered per request, but only one Turbo Frame. I've attempted to refactor Supplier view with Turbo Stream instead of Trubo Frame, but stumbled on errors and went back to functional Turbo Frames implementation.
 I couldn't extract exact FontAwesome icons from Figma, but found as good looking substitutions.
