@@ -21,10 +21,11 @@ class ContractsController < ApplicationController
     begin
       return redirect_to request.referer, notice: 'No file added' if params[:file].nil?
       return redirect_to request.referer, notice: 'Only CSV files allowed' unless params[:file].content_type == 'text/csv'
+      csv_array = csv_file_to_a
+      CsvContractImportJob.perform_later(csv_array, session.id.to_s)
       # debugger
-      # CsvContractImportJob.perform_later(params[:file].path, session.id.to_s)
-      import_service = CsvContractImportService.new(params[:file].path, session.id.to_s)
-      import_service.call
+      # import_service = CsvContractImportService.new(params[:file].path, session.id.to_s)
+      # import_service.call
       # @pagy, @contracts = pagy(Contract.includes(:contract_owner), items: 7)
       # @updated_or_created_counter = import_service.updated_contracts_counter
       # @invalid_records = import_service.invalid_contract_instances
@@ -40,5 +41,14 @@ class ContractsController < ApplicationController
       #but things like these should be caught with middlware error logging service and reported (HoneyBadger, Rollbar, etc)
       render :index, status: :unprocessable_entity
     end
+  end
+
+  private
+
+  def csv_file_to_a
+    require 'csv'
+    file = File.open(params[:file])
+    table = CSV.parse(file, headers: true)
+    table.to_a
   end
 end

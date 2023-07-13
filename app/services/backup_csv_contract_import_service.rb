@@ -1,20 +1,8 @@
 class CsvContractImportService
   require 'csv'
-  HEADERS = {
-    "Contract Owner" => 0,
-    "External Contract ID" => 1,
-    "Contract Name" => 2,
-    "Start Date" => 3,
-    "End Date" => 4,
-    "Contract Value" => 5,
-    "Supplier" => 6
-  }
-
   attr_reader :invalid_contract_instances, :updated_contracts_counter, :result_batches
-  def initialize(csv_array, session_id)
-    # @opened_file = File.open(file_path)
-    csv_array.shift
-    @csv_array = csv_array
+  def initialize(file_path, session_id)
+    @opened_file = File.open(file_path)
     @updated_contracts_counter = 0
     @invalid_contract_instances = []
     @result_batches = []
@@ -23,8 +11,9 @@ class CsvContractImportService
   end
 
   def call
-    # table = CSV.parse(@opened_file, headers: true)
-    @csv_array.each_slice(500) do |batch|
+    table = CSV.parse(@opened_file, headers: true)
+    debugger
+    table.each_slice(500) do |batch|
       emails = get_unique_emails(batch)
       owners = create_and_return_owners(emails)
       @result_batches << upsert_contracts(owners, batch)
@@ -41,7 +30,7 @@ class CsvContractImportService
   private
   
   def get_unique_emails(batch)
-    batch.map {|row| row[HEADERS["Contract Owner"]]}.compact.uniq
+    batch.map {|row| row["Contract Owner"]}.compact.uniq
   end
   
   def create_and_return_owners(emails)
@@ -67,18 +56,18 @@ class CsvContractImportService
 
     batch.each do |row|
       time = Time.current
-      start_date = Date.strptime(row[HEADERS["Start Date"]], '%m/%d/%Y') unless row[HEADERS["Start Date"]].nil?
-      end_date = Date.strptime(row[HEADERS["End Date"]], '%m/%d/%Y') unless row[HEADERS["End Date"]].nil?
+      start_date = Date.strptime(row["Start Date"], '%m/%d/%Y') unless row["Start Date"].nil?
+      end_date = Date.strptime(row["End Date"], '%m/%d/%Y') unless row["End Date"].nil?
       contract_hash = {
-        external_contract_id: row[HEADERS["External Contract ID"]],
-        name: row[HEADERS["Contract Name"]],
+        external_contract_id: row["External Contract ID"],
+        name: row["Contract Name"],
         start_date: start_date,
         end_date: end_date,
-        value_cents: row[HEADERS["Contract Value"]].try(:gsub, /\D/, '').try(:to_i),
-        supplier: row[HEADERS["Supplier"]],
+        value_cents: row["Contract Value"].try(:gsub, /\D/, '').try(:to_i),
+        supplier: row["Supplier"],
         updated_at: time,
         created_at: time,
-        contract_owner_id: owners.rows.to_h[row[HEADERS["Contract Owner"]]]
+        contract_owner_id: owners.rows.to_h[row["Contract Owner"]]
       }
       contract_instance = initialize_to_validate(contract_hash)
 
