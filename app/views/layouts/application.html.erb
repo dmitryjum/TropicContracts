@@ -15,6 +15,7 @@
     <%= render partial: "layouts/nav" %>
 
     <main class="container mx-auto mt-28 mb-10 px-5">
+      <%= turbo_stream_from "flash_#{@session_id}" %>
       <%= render FlashComponent.new(notice:, alert:) %>
       <%= yield %>
     </main>
