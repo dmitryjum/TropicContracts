@@ -22,20 +22,11 @@ class ContractsController < ApplicationController
       return redirect_to request.referer, notice: 'No file added' if params[:file].nil?
       return redirect_to request.referer, notice: 'Only CSV files allowed' unless params[:file].content_type == 'text/csv'
       csv_array = csv_file_to_a
-      CsvContractImportJob.perform_later(csv_array, session.id.to_s)
-      # debugger
-      # import_service = CsvContractImportService.new(params[:file].path, session.id.to_s)
-      # import_service.call
-      # @pagy, @contracts = pagy(Contract.includes(:contract_owner), items: 7)
-      # @updated_or_created_counter = import_service.updated_contracts_counter
-      # @invalid_records = import_service.invalid_contract_instances
-      # flash.now[:notice] = "#{@updated_or_created_counter} records have been created or updated successfuly" if @updated_or_created_counter > 0
-      # flash.now[:alert] = {invalid_records: @invalid_records} if @invalid_records.size > 0
+      CsvContractImportJob.perform_later(csv_array, session.id.to_s) #this job needs to be refactored into the CsvContractImportService class
       flash.now[:notice] = "The CSV import has begun and in process right now"
       respond_to do |format|
         format.turbo_stream
       end
-      # redirect_to index_path
     rescue => e
       Rails.logger.warn(e)
       #but things like these should be caught with middlware error logging service and reported (HoneyBadger, Rollbar, etc)
@@ -44,7 +35,7 @@ class ContractsController < ApplicationController
   end
 
   private
-
+  # this method needs to be refactored in the CsvContractImportService class
   def csv_file_to_a
     require 'csv'
     file = File.open(params[:file])
