@@ -2,6 +2,6 @@
   <%= render FlashComponent.new(notice:, alert:) %>
 <% end %>
 
-<%= turbo_stream.replace "contracts" do %>
-  <%= render ContractRowComponent.with_collection(@contracts) %>
-<% end %>
+<%#= turbo_stream.replace "contracts" do %>
+  <%#= render ContractRowComponent.with_collection(@contracts) %>
+<%# end %>

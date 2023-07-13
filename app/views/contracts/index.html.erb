@@ -1,3 +1,4 @@
+<%= turbo_stream_from "csv_import_#{@session_id}" %>
 <%= turbo_frame_tag "table_container" do %>
   <%= render ContractsContainerComponent.new(contracts: @contracts) do |component| %>
     <% component.with_top_header  do %>
@@ -18,6 +19,6 @@
       </div>
     <% end %>
   <% end %>
-  <%== pagy_combo_nav_js(@pagy) %>
+  <%#== pagy_combo_nav_js(@pagy) %>
   <%= turbo_frame_tag "import_modal" %>
 <% end %>

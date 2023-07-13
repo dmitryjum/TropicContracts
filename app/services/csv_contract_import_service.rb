@@ -1,20 +1,30 @@
 class CsvContractImportService
   require 'csv'
   attr_reader :invalid_contract_instances, :updated_contracts_counter, :result_batches
-  def initialize(file)
-    @opened_file = File.open(file)
+  def initialize(file_path, session_id)
+    @opened_file = File.open(file_path)
     @updated_contracts_counter = 0
     @invalid_contract_instances = []
     @result_batches = []
+    @session_id = session_id
+    @flash = {}
   end
 
   def call
     table = CSV.parse(@opened_file, headers: true)
+    debugger
     table.each_slice(500) do |batch|
       emails = get_unique_emails(batch)
       owners = create_and_return_owners(emails)
       @result_batches << upsert_contracts(owners, batch)
     end
+    if @updated_contracts_counter > 0
+      @flash[:notice] = "#{@updated_contracts_counter} records have been created or updated successfuly"
+      Turbo:StreamsChannel.broadcast_replace_to("csv_import_#{@session_id}", target: "contracts", html: rendered_contract_row_component)
+    else
+      @flash[:notice] = "No contracts have been updated or created"
+    end
+    Turbo:StreamsChannel.broadcast_replace_to("flash_#{@session_id}", target: "flash", html: rendered_flash_component)
   end
   
   private
@@ -63,6 +73,8 @@ class CsvContractImportService
 
       unless contract_instance.valid?
         @invalid_contract_instances << contract_instance
+        @flash[:alert] = {invalid_records: @invalid_records}
+        Turbo:StreamsChannel.broadcast_replace_to("flash_#{@session_id}", target: "flash", html: rendered_flash_component)
       else
         valid_contract_hashes << contract_hash
       end
@@ -81,5 +93,17 @@ class CsvContractImportService
     contract = Contract.find_or_initialize_by(external_contract_id: hash[:external_contract_id])
     contract.assign_attributes(hash)
     contract
+  end
+
+  def rendered_flash_component
+    ApplicationController.render(
+      FlashComponent.new(notice: @flash[:notice], alert: @flash[:alert]), layout: false
+    )
+  end
+
+  def rendered_row_component
+    ApplicationController.render(
+      ContractRowComponent.with_collection(Contract.include(:contract_owner)), layout: false
+    )
   end
 end
