@@ -39,6 +39,7 @@ class CsvContractImportService
       # ContractImportJob.perform should be called on this line inside itself with sliced batch, or the next slice -- figure it out
     end
     
+    # the code block below would go to the end of #upsert_contracts method
     if @updated_contracts_counter > 0
       @flash[:notice] = "#{@updated_contracts_counter} records have been created or updated successfuly"
       Turbo::StreamsChannel.broadcast_replace_to("csv_import_#{@session_id}", target: "contracts", html: rendered_contract_row_component)
