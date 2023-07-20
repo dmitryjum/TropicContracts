@@ -22,10 +22,21 @@ class CsvContractImportService
   end
 
   def call
+    # the method below should be implemented in this service:
+    #  def csv_file_to_a
+    #   require 'csv'
+    #   file = File.open(params[:file])
+    #   table = CSV.parse(file, headers: true)
+    #   table.to_a
+    # end
+    # ContractImportJob should take batch_array,
+    # session_id and updated_contracts_counter (add to arg every time),
+    # invalid_contract_instances array of error strings, updated on every job
     @csv_array.each_slice(500) do |batch| # these batches have to be performed as a background job
       emails = get_unique_emails(batch)
       owners = create_and_return_owners(emails)
       @result_batches << upsert_contracts(owners, batch)
+      # ContractImportJob.perform should be called on this line inside itself with sliced batch, or the next slice -- figure it out
     end
     
     if @updated_contracts_counter > 0
@@ -82,7 +93,7 @@ class CsvContractImportService
       contract_instance = initialize_to_validate(contract_hash)
 
       unless contract_instance.valid?
-        @invalid_contract_instances << contract_instance
+        @invalid_contract_instances << contract_instance #an arror string should be pushd instead of the instance to a passed argument
         @flash[:alert] = {invalid_records: @invalid_contract_instances}
         Turbo::StreamsChannel.broadcast_replace_to("flash_#{@session_id}", target: "flash", html: rendered_flash_component)
       else
