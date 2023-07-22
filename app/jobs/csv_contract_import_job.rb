@@ -12,12 +12,28 @@ class CsvContractImportJob < ApplicationJob
     "Supplier" => 6
   }
 
-  def perform(csv_array:, session_id:, updated_contracts_counter: 0, invalid_contract_instances: {})
-    batch = csv_array.shift(500)
-    emails = get_unique_emails(batch)
-    owners = create_and_return_owners(emails)
-    recursive_values = upsert_contracts(owners, batch, session_id, updated_contracts_counter, invalid_contract_instances)
-    perform(csv_array:, session_id:, updated_contracts_counter: recursive_values[:counter], invalid_contract_instances: recursive_values[:invalid])
+  def perform(csv_array:, session_id:, updated_contracts_counter: 0, validation_errors: {})
+    if csv_array.length > 0
+      batch = csv_array.shift(3)
+      emails = get_unique_emails(batch)
+      owners = create_and_return_owners(emails)
+      recursive_values = upsert_contracts(owners, batch, session_id, updated_contracts_counter, validation_errors)
+      if csv_array.length > 0
+        perform(csv_array:, session_id:, updated_contracts_counter: recursive_values[:counter], validation_errors: recursive_values[:invalid])
+      end
+      #DEBUG TODO: something's happening with flash messages: they don't persist on every batch, but replace each batch of flashes
+      # successfuly updated contract counter doesn't add up either
+      if recursive_values[:counter] > 0
+        recursive_values[:flash][:notice] = "#{recursive_values[:counter]} records have been created or updated successfuly"
+        Turbo::StreamsChannel.broadcast_replace_to("csv_import_#{session_id}", target: "contracts", html: rendered_contract_row_component)
+      else
+        recursive_values[:flash][:notice] = "No contracts have been updated or created"
+      end
+      Turbo::StreamsChannel.broadcast_replace_to("flash_#{session_id}", target: "flash", html: rendered_flash_component(flash: recursive_values[:flash]))
+    else
+      flash = {alert: "Your csv file must be empty!"}
+      Turbo::StreamsChannel.broadcast_replace_to("flash_#{session_id}", target: "flash", html: rendered_flash_component(flash:))
+    end
   end
 
   private
@@ -44,9 +60,9 @@ class CsvContractImportJob < ApplicationJob
     )
   end
 
-  def upsert_contracts(owners, batch, session_id, updated_contracts_counter, invalid_contract_instances)
+  def upsert_contracts(owners, batch, session_id, updated_contracts_counter, validation_errors)
     valid_contract_hashes = []
-    invalid_contract_instances = []
+    validation_errors = {}
     flash = {}
 
     batch.each do |row|
@@ -66,30 +82,24 @@ class CsvContractImportJob < ApplicationJob
       }
       contract_instance = initialize_to_validate(contract_hash)
       unless contract_instance.valid?
-        invalid_contract_instances << contract_instance #an arror string should be pushd instead of the instance to a passed argument
-        flash[:alert] = {invalid_records: invalid_contract_instances}
-        Turbo::StreamsChannel.broadcast_replace_to("flash_#{session_id}", target: "flash", html: rendered_flash_component(flash:)
+        validation_errors[contract_instance.external_contract_id] = contract_instance.errors.full_messages
+        flash[:alert] = {invalid_records: validation_errors}
+        Turbo::StreamsChannel.broadcast_replace_to("flash_#{session_id}", target: "flash", html: rendered_flash_component(flash:))
       else
         valid_contract_hashes << contract_hash
       end
     end
 
-    result = Contract.upsert_all(
-      valid_contract_hashes,
-      unique_by: [:external_contract_id, :index_contracts_on_external_contract_id],
-      returning: [:name, :start_date, :end_date, :value_cents, :supplier, :contract_owner_id]
-    )
-    updated_contracts_counter += result.length
-
-    if updated_contracts_counter > 0
-      flash[:notice] = "#{updated_contracts_counter} records have been created or updated successfuly"
-      Turbo::StreamsChannel.broadcast_replace_to("csv_import_#{@session_id}", target: "contracts", html: rendered_contract_row_component)
-    else
-      flash[:notice] = "No contracts have been updated or created"
+    if valid_contract_hashes.length > 0
+      result = Contract.upsert_all(
+        valid_contract_hashes,
+        unique_by: [:external_contract_id, :index_contracts_on_external_contract_id],
+        returning: [:name, :start_date, :end_date, :value_cents, :supplier, :contract_owner_id]
+      )
+      updated_contracts_counter += result.length
     end
-    Turbo::StreamsChannel.broadcast_replace_to("flash_#{@session_id}", target: "flash", html: rendered_flash_component(flash:))
 
-    { counter: updated_contracts_counter, invalid: invalid_countract_instances }
+    { counter: updated_contracts_counter, invalid: validation_errors, flash: }
   end
 
   def initialize_to_validate(hash)
@@ -100,7 +110,7 @@ class CsvContractImportJob < ApplicationJob
 
   def rendered_flash_component(flash: {})
     ApplicationController.render(
-      FlashComponent.new(notice: @flash[:notice], alert: @flash[:alert]), layout: false
+      FlashComponent.new(notice: flash[:notice], alert: flash[:alert]), layout: false
     )
   end
 

@@ -21,9 +21,7 @@ class ContractsController < ApplicationController
     begin
       return redirect_to request.referer, notice: 'No file added' if params[:file].nil?
       return redirect_to request.referer, notice: 'Only CSV files allowed' unless params[:file].content_type == 'text/csv'
-      # csv_array = csv_file_to_a
-      # CsvContractImportJob.perform_later(csv_array, session.id.to_s) #this job needs to be refactored into the CsvContractImportService class
-      CsvContractImportService.new(params[:file], session_id).call
+      CsvContractImportService.new(params[:file], session.id.to_s).call
       flash.now[:notice] = "The CSV import has begun and in process right now"
       respond_to do |format|
         format.turbo_stream
@@ -34,13 +32,4 @@ class ContractsController < ApplicationController
       render :index, status: :unprocessable_entity
     end
   end
-
-  # private
-  # this method needs to be refactored in the CsvContractImportService class
-  # def csv_file_to_a
-  #   require 'csv'
-  #   file = File.open(params[:file])
-  #   table = CSV.parse(file, headers: true)
-  #   table.to_a
-  # end
 end
