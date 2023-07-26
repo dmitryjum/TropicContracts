@@ -20,16 +20,15 @@ class CsvContractImportJob < ApplicationJob
       recursive_values = upsert_contracts(owners, batch, session_id, updated_contracts_counter, validation_errors)
       if csv_array.length > 0
         perform(csv_array:, session_id:, updated_contracts_counter: recursive_values[:counter], validation_errors: recursive_values[:invalid])
-      end
-      #DEBUG TODO: something's happening with flash messages: they don't persist on every batch, but replace each batch of flashes
-      # successfuly updated contract counter doesn't add up either
-      if recursive_values[:counter] > 0
-        recursive_values[:flash][:notice] = "#{recursive_values[:counter]} records have been created or updated successfuly"
-        Turbo::StreamsChannel.broadcast_replace_to("csv_import_#{session_id}", target: "contracts", html: rendered_contract_row_component)
       else
-        recursive_values[:flash][:notice] = "No contracts have been updated or created"
+        if recursive_values[:counter] > 0
+          recursive_values[:flash][:notice] = "#{recursive_values[:counter]} records have been created or updated successfuly"
+          Turbo::StreamsChannel.broadcast_replace_to("csv_import_#{session_id}", target: "contracts", html: rendered_contract_row_component)
+        else
+          recursive_values[:flash][:notice] = "No contracts have been updated or created"
+        end
+        Turbo::StreamsChannel.broadcast_replace_to("flash_#{session_id}", target: "flash", html: rendered_flash_component(flash: recursive_values[:flash]))
       end
-      Turbo::StreamsChannel.broadcast_replace_to("flash_#{session_id}", target: "flash", html: rendered_flash_component(flash: recursive_values[:flash]))
     else
       flash = {alert: "Your csv file must be empty!"}
       Turbo::StreamsChannel.broadcast_replace_to("flash_#{session_id}", target: "flash", html: rendered_flash_component(flash:))
@@ -62,7 +61,6 @@ class CsvContractImportJob < ApplicationJob
 
   def upsert_contracts(owners, batch, session_id, updated_contracts_counter, validation_errors)
     valid_contract_hashes = []
-    validation_errors = {}
     flash = {}
 
     batch.each do |row|
