@@ -14,7 +14,7 @@ class CsvContractImportJob < ApplicationJob
 
   def perform(csv_array:, session_id:, updated_contracts_counter: 0, validation_errors: {})
     if csv_array.length > 0
-      batch = csv_array.shift(3)
+      batch = csv_array.shift(500)
       emails = get_unique_emails(batch)
       owners = create_and_return_owners(emails)
       recursive_values = upsert_contracts(owners, batch, session_id, updated_contracts_counter, validation_errors)
