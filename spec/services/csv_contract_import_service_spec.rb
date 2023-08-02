@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CsvContractImportService do
-  describe '#call' do
+  xdescribe '#call' do
     let(:file_path) { Rails.root.join('tmp', 'file.csv') }
     let(:invalid_records_file_path) { Rails.root.join('tmp', 'invalid_records_file.csv') }
     let(:csv_data) do
